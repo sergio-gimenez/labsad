@@ -3,39 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
-
 package terminaleditor;
-
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.logging.Logger;
+import java.lang.StringBuilder;
 /**
  *
  * @author lsadusr16
  */
 
 public class EditableBufferedReader extends BufferedReader {
-
-    private static final int BACKSPACE = 127;
-    private static final int UP = 1000;
-    private static final int DOWN = 1001;
-    private static final int LEFT = 1002;
-    private static final int RIGHT = 1003;
-    private static final int HOME = 1004;
-    private static final int END = 1005;
-    private static final int INSERT = 1006;
-    private static final int SUPR = 1007;
     private Line line;
     private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-
+    private StringBuilder strBuilder;
 
     public EditableBufferedReader(Reader in) {
         super(in);
-        this.line = new Line();
+        line = new Line();
+        strBuilder = new StringBuilder("");
     }
 
     public void setRaw() {
@@ -56,85 +44,81 @@ public class EditableBufferedReader extends BufferedReader {
         }
     }
 
-    /**
-     * implemented read() to differentiate the special characters.
-     * we define var1=27 when a special character
-     *
-     * @return final int for the method readLine()
-     */
-    public int read() {
-        int var1;
-        try {
-            var1 = super.read();
-            switch (var1) {
-                case 27: //special character
-                    var1 = super.read();
-                    while (var1 == '[' || var1 == 'O') {
-                        var1 = super.read();
-                    }
-                    switch (var1) {
-                        case 'A':
-                            return UP;
-                        case 'B':
-                            return DOWN;
-                        case 'D':
-                            return LEFT;
-                        case 'C':
-                            return RIGHT;
-                        case 'H':
-                            return HOME;
-                        case 'F':
-                            return END;
-                        case '2':
-                            super.read();
-                            return INSERT;
-                        case '3':
-                            super.read();
-                            return SUPR;
-                    }
-
-                default:
-                    return var1;
-            }
-        } catch (IOException e) {
-            return 0;
-        }
+    public final class Key {
+      private static final int BACKSPACE = 127;
+      private static final int UP = 1000;
+      private static final int DOWN = 1001;
+      private static final int LEFT = 1002;
+      private static final int RIGHT = 1003;
+      private static final int HOME = 1004;
+      private static final int END = 1005;
+      private static final int INSERT = 1006;
+      private static final int SUPR = 1007;
     }
 
-    /**
-     * implemented readLine to read special characters
-     *
-     * @return final response
-     */
-    public String readLine() {
+    public int read() throws IOException {
+     	int ch, ch1;
+     	if ((ch = super.read()) != '\033') //Indicates special character, same 27
+     		return ch;
+     	switch (ch = super.read()) {
+     		case 'O': //SS3
+     			switch (ch = super.read()) {
+     				case 'H': return Key.HOME;
+     				case 'F': return Key.END;
+     				default: return ch;
+     			}
+     		case '[': //CSI
+     			switch (ch = super.read()) {
+     				case 'C': return Key.RIGHT;
+     				case 'D': return Key.LEFT;
+     				case '1':
+     				case '2':
+     				case '3':
+     				case '4':
+     					if ((ch1 = super.read()) != '~') {
+     						return ch1;
+              }
+     					return Key.HOME + ch - '1';
+     				default: return ch;
+     			}
+     		default:
+     		 		return ch;
+     	}
+     }
+
+    public String readLine() throws IOException {
         int r;
         String response;
         setRaw();
-        while ((r = this.read()) != 13) {
+        while ((r = this.read()) != '\r') { //'\r' and not '\n' because console is on raw mode and not cooked
             switch (r) {
-                case UP:
+                case Key.UP:
                     break;
-                case DOWN:
+                case Key.DOWN:
                     break;
-                case LEFT:
+                case Key.LEFT:
                     line.left();
+                    System.out.print("\033[" + "D");
                     break;
-                case RIGHT:
+                case Key.RIGHT:
                     line.right();
+                    System.out.print("\033[" + "C");
                     break;
-                case HOME:
+                case Key.HOME:
                     line.home();
+                    System.out.print("\033[" + "0G");
                     break;
-                case END:
+                case Key.END:
                     line.end();
+                    System.out.print("\033[" + (strBuilder.length() + 1) + "G");
                     break;
-                case INSERT:
+                case Key.INSERT:
                     line.insert();
                     break;
-                case SUPR:
+                case Key.SUPR:
                     line.supr();
                     break;
-                case BACKSPACE:
+                case Key.BACKSPACE:
                     line.backspace();
                     break;
                 default:

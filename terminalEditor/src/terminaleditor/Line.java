@@ -10,7 +10,6 @@ package terminaleditor;
  *
  * @author lsadusr16
  */
-import java.lang.StringBuilder;
 
 public class Line {
 
@@ -20,10 +19,6 @@ public class Line {
 
     private static final String CSI = "\033[";
 
-    /**
-     * Line constructor
-     *
-     */
     public Line() {
         index = 0;
         insertState = false;
@@ -49,48 +44,27 @@ public class Line {
         index++;
     }
 
-    /**
-     * toString final method
-     *
-     * @return
-     */
     public String toString() {
         home();
         return this.sb.toString();
     }
 
-    /**
-     * set insertState
-     */
     public void insert() {
         insertState = !insertState;
     }
 
-    /**
-     * go left
-     */
     public void left() {
         if (index > 0) {
-            index--;
-            System.out.print(CSI + "D");
-            //ebr.executeLinuxCommand("echo -enCSI + \"1D\"");
+            index = index-1;
         }
     }
 
-    /**
-     * go right
-     */
     public void right() {
         if (index < sb.length()) {
-            index++;
-            System.out.print(CSI + "C");
+            index = index+1;
         }
     }
 
-
-    /**
-     * edit backspace to implement insert state. Move index left and delete char.
-     */
     public void backspace() {
         if (index <= sb.length() && index > 0) {
             System.out.print(CSI + "D");     //move left
@@ -101,9 +75,6 @@ public class Line {
         }
     }
 
-    /**
-     * Delete actual index and replace it with the previous char.
-     */
     public void supr() {
         if (index < sb.length()) {
             System.out.print(CSI + "1P"); //delete char and replace it
@@ -112,19 +83,11 @@ public class Line {
         }
     }
 
-    /**
-     * go home
-     */
     public void home() {
-        System.out.print(CSI + "0G");
         index = 0;
     }
 
-    /**
-     * go end
-     */
     public void end() {
-        System.out.print(CSI + (sb.length() + 1) + "G");
         index = sb.length();
     }
 }
