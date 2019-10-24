@@ -15,7 +15,7 @@ public class Line {
 
     private int index;
     private boolean insertState;
-    private StringBuilder sb;
+    public StringBuilder sb;
 
     private static final String CSI = "\033[";
 
@@ -67,9 +67,7 @@ public class Line {
 
     public void backspace() {
         if (index <= sb.length() && index > 0) {
-            System.out.print(CSI + "D");     //move left
-            System.out.print(CSI + "1P");    //delete char
-            index--;
+            index=index-1;
             sb.deleteCharAt(index);
             //sb.trimToSize();
         }
@@ -77,9 +75,7 @@ public class Line {
 
     public void supr() {
         if (index < sb.length()) {
-            System.out.print(CSI + "1P"); //delete char and replace it
             sb.deleteCharAt(index);
-            //sb.trimToSize();
         }
     }
 

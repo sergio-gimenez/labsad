@@ -9,7 +9,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.logging.Logger;
-import java.lang.StringBuilder;
 /**
  *
  * @author lsadusr16
@@ -18,12 +17,10 @@ import java.lang.StringBuilder;
 public class EditableBufferedReader extends BufferedReader {
     private Line line;
     private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    private StringBuilder strBuilder;
 
     public EditableBufferedReader(Reader in) {
         super(in);
         line = new Line();
-        strBuilder = new StringBuilder("");
     }
 
     public void setRaw() {
@@ -57,10 +54,11 @@ public class EditableBufferedReader extends BufferedReader {
     }
 
     public int read() throws IOException {
-     	int ch, ch1;
-     	if ((ch = super.read()) != '\033') //Indicates special character, same 27
+     	int ch;
+     	if ((ch=super.read()) != '\033'){ //Same 27
      		return ch;
-     	switch (ch = super.read()) {
+      }
+      switch (ch = super.read()) { //From here, special character
      		case 'O': //SS3
      			switch (ch = super.read()) {
      				case 'H': return Key.HOME;
@@ -71,14 +69,16 @@ public class EditableBufferedReader extends BufferedReader {
      			switch (ch = super.read()) {
      				case 'C': return Key.RIGHT;
      				case 'D': return Key.LEFT;
-     				case '1':
-     				case '2':
-     				case '3':
-     				case '4':
-     					if ((ch1 = super.read()) != '~') {
-     						return ch1;
-              }
-     					return Key.HOME + ch - '1';
+     				case '2': super.read(); return Key.INSERT;
+     				case '3': super.read(); return Key.SUPR;
+            // case '1':
+            // case '2':
+            // case '3':
+            // case '4':
+     				// 	if ((ch1 = super.read()) != '~') {
+     				// 		return ch1;
+            //   }
+     				// 	return Key.HOME + ch - '1';
      				default: return ch;
      			}
      		default:
@@ -105,21 +105,24 @@ public class EditableBufferedReader extends BufferedReader {
                     System.out.print("\033[" + "C");
                     break;
                 case Key.HOME:
-                    line.home();
                     System.out.print("\033[" + "0G");
+                    line.home();
                     break;
                 case Key.END:
+                    System.out.print("\033[" + (line.sb.length() + 1) + "G");
                     line.end();
-                    System.out.print("\033[" + (strBuilder.length() + 1) + "G");
                     break;
                 case Key.INSERT:
                     line.insert();
                     break;
                 case Key.SUPR:
+                    System.out.print("\033[" + "1P");
                     line.supr();
                     break;
                 case Key.BACKSPACE:
                     line.backspace();
+                    System.out.print("\033[" + "D");
+                    System.out.print("\033[" + "1P");
                     break;
                 default:
                     line.addChar((char) r);
