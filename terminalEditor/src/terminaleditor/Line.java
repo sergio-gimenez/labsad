@@ -25,23 +25,17 @@ public class Line {
         sb = new StringBuilder("");
     }
 
-    /**
-     * Add char when a normal character is write
-     *
-     * @param c
-     */
-    public void addChar(char c) {
+    public boolean addChar(char c) {
 
         if (insertState) {
             sb.insert(index, c);
-            System.out.print(CSI + "1@");
 
         } else {
             if (index >= sb.length()) sb.append(c);
             else sb.setCharAt(index, c);
         }
-        System.out.print(c);
         index++;
+        return insertState;
     }
 
     public String toString() {
@@ -53,30 +47,37 @@ public class Line {
         insertState = !insertState;
     }
 
-    public void left() {
+    public boolean left() {
         if (index > 0) {
             index = index-1;
+            return true;
         }
+        return false;
     }
 
-    public void right() {
+    public boolean right() {
         if (index < sb.length()) {
             index = index+1;
+            return true;
         }
+        return false;
     }
 
-    public void backspace() {
+    public boolean backspace() {
         if (index <= sb.length() && index > 0) {
             index=index-1;
             sb.deleteCharAt(index);
-            //sb.trimToSize();
+            return true;
         }
+        return false;
     }
 
-    public void supr() {
+    public boolean supr() {
         if (index < sb.length()) {
             sb.deleteCharAt(index);
+            return true;
         }
+        return false;
     }
 
     public void home() {

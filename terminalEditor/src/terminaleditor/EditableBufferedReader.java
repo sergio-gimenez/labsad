@@ -96,16 +96,22 @@ public class EditableBufferedReader extends BufferedReader {
                     break;
                 case Key.DOWN:
                     break;
-                case Key.LEFT:
-                    line.left();
-                    System.out.print("\033[" + "D");
-                    break;
+                case Key.LEFT: //Comprovar no sigui < index
+                    if(line.left()){
+                      System.out.print("\033[" + "D");
+                      break;
+                    }
+                    else
+                      break;
                 case Key.RIGHT:
-                    line.right();
-                    System.out.print("\033[" + "C");
-                    break;
+                    if(line.right()){
+                      System.out.print("\033[" + "C");
+                      break;
+                    }
+                    else
+                      break;
                 case Key.HOME:
-                    System.out.print("\033[" + "0G");
+                    System.out.print("\033[" + "0G"); //[nG = Move to column 'n' of current line
                     line.home();
                     break;
                 case Key.END:
@@ -116,16 +122,25 @@ public class EditableBufferedReader extends BufferedReader {
                     line.insert();
                     break;
                 case Key.SUPR:
-                    System.out.print("\033[" + "1P");
-                    line.supr();
-                    break;
+                    if(line.supr()){
+                        System.out.print("\033[" + "1P"); //[1P = Delete a character position (shift line to the left)
+                        break;
+                    }
+                    else
+                      break;
                 case Key.BACKSPACE:
-                    line.backspace();
-                    System.out.print("\033[" + "D");
-                    System.out.print("\033[" + "1P");
-                    break;
+                    if(line.backspace()){
+                      System.out.print("\033[" + "D");
+                      System.out.print("\033[" + "1P");
+                      break;
+                    }
+                    else
+                      break;
                 default:
-                    line.addChar((char) r);
+                boolean flag = line.addChar((char) r);
+                    if(flag)
+                      System.out.print("\033[" + "1@");
+                    System.out.print((char) r);
                     break;
             }
         }
