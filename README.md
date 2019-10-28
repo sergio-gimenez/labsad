@@ -1,2 +1,2 @@
 # SAD Lab
-Welcome to a very SAD story.
+Why so SAD
