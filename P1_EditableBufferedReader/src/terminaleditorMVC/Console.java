@@ -1,0 +1,42 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package terminaleditorMVC;
+
+import java.io.Observer;
+import java.io.Observable;
+import java.io.IOException;
+/**
+ *
+ * @author lsadusr16
+ */
+
+public class Console implements Observer {
+	
+    Line line;
+    final String CSI = "\033[";	
+
+    public Console(Line line) {
+        this.line = line;
+	line.addObserver(this);
+    }
+	
+    public void update(Observable o, Object arg){	
+	switch(arg) {
+		case Key.UP:
+			break;
+		case Key.DOWN:
+			break;
+		case Key.LEFT:
+			System.out.print(CSI + "D");
+			break;
+		case Key.RIGHT:
+			System.out.print(CSI + "C");
+			break;
+	}
+    }
+
+    
+}
