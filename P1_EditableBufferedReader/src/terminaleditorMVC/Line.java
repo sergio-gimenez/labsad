@@ -24,6 +24,39 @@ public class Line extends Observable {
         sb = new StringBuilder("");
     }
 
+    public String toString() {
+        home();
+        return this.sb.toString();
+    }
+
+    public void home() {
+        index = 0;
+        notifyObservers();
+    }
+
+    public void end() {
+        index = sb.length();
+        notifyObservers();
+    }
+
+    public boolean right() {
+        if (index < sb.length()) {
+            index = index+1;
+        }
+        notifyObservers();
+    }
+
+    public boolean left() {
+        if (index > 0) {
+            index = index-1;
+        }
+        notifyObservers();
+    }
+
+    public void insert() {
+        insertState = !insertState;
+    }
+
     public boolean addChar(char c) {
 
         if (insertState) {
@@ -33,63 +66,23 @@ public class Line extends Observable {
             if (index >= sb.length()) sb.append(c);
             else sb.setCharAt(index, c);
         }
-        index++;
+        index=index+1;
         return insertState;
+        notifyObservers();
     }
 
-    public String toString() {
-        home();
-        return this.sb.toString();
-    }
-
-    public void insert() {
-        insertState = !insertState;
-    }
-
-    public boolean left() {
-        if (index > 0) {
-            index = index-1;
-            notifyObservers();
-            return true;
-        }
-        return false;
-    }
-
-    public boolean right() {
+    public boolean supr() {
         if (index < sb.length()) {
-            index = index+1;
-            notifyObservers();
-            return true;
+            sb.deleteCharAt(index);
         }
-        return false;
+        notifyObservers();
     }
 
     public boolean backspace() {
         if (index <= sb.length() && index > 0) {
             index=index-1;
             sb.deleteCharAt(index);
-            notifyObservers();
-            return true;
         }
-        return false;
-    }
-
-    public boolean supr() {
-        if (index < sb.length()) {
-            sb.deleteCharAt(index);
-            notifyObservers();
-            return true;
-        }
-        return false;
-    }
-
-    public void home() {
         notifyObservers();
-        index = 0;
-    }
-
-    public void end() {
-        notifyObservers();
-        index = sb.length();
     }
 }

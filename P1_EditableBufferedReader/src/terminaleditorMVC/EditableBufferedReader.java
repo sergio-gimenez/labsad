@@ -8,7 +8,6 @@ package terminaleditorMVC;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.logging.Logger;
 /**
  *
  * @author lsadusr16
@@ -23,11 +22,11 @@ public class EditableBufferedReader extends BufferedReader {
     }
 
     public void setRaw() throws IOException {
-	new ProcessBuilder("/bin/sh", "-c", "stty -echo raw </dev/tty").start();
+	     new ProcessBuilder("/bin/sh", "-c", "stty -echo raw </dev/tty").start();
     }
 
     public void unsetRaw() throws IOException {
-	new ProcessBuilder("/bin/sh", "-c", "stty echo -raw </dev/tty").start();
+	     new ProcessBuilder("/bin/sh", "-c", "stty echo -raw </dev/tty").start();
     }
 
     public int read() throws IOException {
@@ -71,51 +70,29 @@ public class EditableBufferedReader extends BufferedReader {
                     break;
                 case Key.DOWN:
                     break;
-                case Key.LEFT: //Comprovar no sigui < index
-                    if(line.left()){
-                      System.out.print("\033[" + "D");
-                      break;
-                    }
-                    else
-                      break;
                 case Key.RIGHT:
-                    if(line.right()){
-                      System.out.print("\033[" + "C");
-                      break;
-                    }
-                    else
-                      break;
+                   line.right();
+                   break;
+                case Key.LEFT: //Comprovar no sigui < index
+                    line.left();
+                    break;
                 case Key.HOME:
-                    System.out.print("\033[" + "0G"); //[nG = Move to column 'n' of current line
                     line.home();
                     break;
                 case Key.END:
-                    System.out.print("\033[" + (line.sb.length() + 1) + "G");
                     line.end();
                     break;
                 case Key.INSERT:
                     line.insert();
                     break;
                 case Key.SUPR:
-                    if(line.supr()){
-                        System.out.print("\033[" + "1P"); //[1P = Delete a character position (shift line to the left)
-                        break;
-                    }
-                    else
-                      break;
+                    line.supr();
+                    break;
                 case Key.BACKSPACE:
-                    if(line.backspace()){
-                      System.out.print("\033[" + "D");
-                      System.out.print("\033[" + "1P");
-                      break;
-                    }
-                    else
-                      break;
+                    line.backspace();
+                    break;
                 default:
-                boolean flag = line.addChar((char) r);
-                    if(flag)
-                      System.out.print("\033[" + "1@"); //  [1@ = Insert a blank character position (shift line to the right)
-                    System.out.print((char) r);
+                    line.addChar((char) r);
                     break;
             }
         }
