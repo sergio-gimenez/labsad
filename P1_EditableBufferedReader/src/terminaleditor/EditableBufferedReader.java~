@@ -23,22 +23,12 @@ public class EditableBufferedReader extends BufferedReader {
         line = new Line();
     }
 
-    public void setRaw() {
-        String[] cmd = {"/bin/sh", "-c", "stty -echo raw </dev/tty"};
-        executeLinuxCommand(cmd);
+    public void setRaw() throws IOException {
+	new ProcessBuilder("/bin/sh", "-c", "stty -echo raw </dev/tty").start(); 
     }
 
-    public void unsetRaw() {
-        String[] cmd = {"/bin/sh", "-c", "stty echo -raw </dev/tty"};
-        executeLinuxCommand(cmd);
-    }
-
-    public void executeLinuxCommand(String[] command) {
-        try {
-            Runtime.getRuntime().exec(command);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void unsetRaw() throws IOException {
+	new ProcessBuilder("/bin/sh", "-c", "stty echo -raw </dev/tty").start(); 
     }
 
     public final class Key {
@@ -48,9 +38,9 @@ public class EditableBufferedReader extends BufferedReader {
       private static final int LEFT = 1002;
       private static final int RIGHT = 1003;
       private static final int HOME = 1004;
-      private static final int END = 1005;
-      private static final int INSERT = 1006;
-      private static final int SUPR = 1007;
+      private static final int END = 1007;
+      private static final int INSERT = 1005;
+      private static final int SUPR = 1006;
     }
 
     public int read() throws IOException {
@@ -69,8 +59,6 @@ public class EditableBufferedReader extends BufferedReader {
      			switch (ch = super.read()) {
      				case 'C': return Key.RIGHT;
      				case 'D': return Key.LEFT;
-     				//case '2': super.read(); return Key.INSERT;
-     				//case '3': super.read(); return Key.SUPR;
             			case '1':
            			case '2':
             			case '3':
