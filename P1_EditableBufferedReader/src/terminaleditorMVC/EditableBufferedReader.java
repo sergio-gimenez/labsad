@@ -8,7 +8,6 @@ package terminaleditorMVC;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.logging.Logger;
 /**
  *
  * @author lsadusr16
@@ -16,7 +15,6 @@ import java.util.logging.Logger;
 
 public class EditableBufferedReader extends BufferedReader {
     private Line line;
-    private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     public EditableBufferedReader(Reader in) {
         super(in);
@@ -24,6 +22,7 @@ public class EditableBufferedReader extends BufferedReader {
     }
 
     public void setRaw() throws IOException {
+<<<<<<< HEAD
 	new ProcessBuilder("/bin/sh", "-c", "stty -echo raw </dev/tty").start();
     }
 
@@ -41,6 +40,13 @@ public class EditableBufferedReader extends BufferedReader {
       private static final int END = 1007;
       private static final int INSERT = 1005;
       private static final int SUPR = 1006;
+=======
+	     new ProcessBuilder("/bin/sh", "-c", "stty -echo raw </dev/tty").start();
+    }
+
+    public void unsetRaw() throws IOException {
+	     new ProcessBuilder("/bin/sh", "-c", "stty echo -raw </dev/tty").start();
+>>>>>>> c3a629984a2783a5ff95a4dbad1959ef59cbe9da
     }
 
     public int read() throws IOException {
@@ -60,7 +66,7 @@ public class EditableBufferedReader extends BufferedReader {
      				case 'C': return Key.RIGHT;
      				case 'D': return Key.LEFT;
             			case '1':
-           			case '2':
+           		  	case '2':
             			case '3':
             			case '4':
      					if ((ch1 = super.read()) != '~') {
@@ -84,51 +90,36 @@ public class EditableBufferedReader extends BufferedReader {
                     break;
                 case Key.DOWN:
                     break;
-                case Key.LEFT: //Comprovar no sigui < index
-                    if(line.left()){
-                      System.out.print("\033[" + "D");
-                      break;
-                    }
-                    else
-                      break;
                 case Key.RIGHT:
-                    if(line.right()){
-                      System.out.print("\033[" + "C");
-                      break;
-                    }
-                    else
-                      break;
+                   line.right();
+                   break;
+                case Key.LEFT: //Comprovar no sigui < index
+                    line.left();
+                    break;
                 case Key.HOME:
-                    System.out.print("\033[" + "0G"); //[nG = Move to column 'n' of current line
                     line.home();
                     break;
                 case Key.END:
-                    System.out.print("\033[" + (line.sb.length() + 1) + "G");
                     line.end();
                     break;
                 case Key.INSERT:
                     line.insert();
                     break;
                 case Key.SUPR:
-                    if(line.supr()){
-                        System.out.print("\033[" + "1P"); //[1P = Delete a character position (shift line to the left)
-                        break;
-                    }
-                    else
-                      break;
+                    line.supr();
+                    break;
                 case Key.BACKSPACE:
-                    if(line.backspace()){
-                      System.out.print("\033[" + "D");
-                      System.out.print("\033[" + "1P");
-                      break;
-                    }
-                    else
-                      break;
+                    line.backspace();
+                    break;
                 default:
+<<<<<<< HEAD
                 public boolean flag = line.addChar((char) r);
                     if(flag)
                       System.out.print("\033[" + "1@"); //  [1@ = Insert a blank character position (shift line to the right)
                     System.out.print((char) r);
+=======
+                    line.addChar((char) r);
+>>>>>>> c3a629984a2783a5ff95a4dbad1959ef59cbe9da
                     break;
             }
         }
