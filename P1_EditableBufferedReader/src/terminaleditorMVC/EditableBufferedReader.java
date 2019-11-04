@@ -24,11 +24,11 @@ public class EditableBufferedReader extends BufferedReader {
     }
 
     public void setRaw() throws IOException {
-	new ProcessBuilder("/bin/sh", "-c", "stty -echo raw </dev/tty").start(); 
+	new ProcessBuilder("/bin/sh", "-c", "stty -echo raw </dev/tty").start();
     }
 
     public void unsetRaw() throws IOException {
-	new ProcessBuilder("/bin/sh", "-c", "stty echo -raw </dev/tty").start(); 
+	new ProcessBuilder("/bin/sh", "-c", "stty echo -raw </dev/tty").start();
     }
 
     public final class Key {
@@ -125,7 +125,7 @@ public class EditableBufferedReader extends BufferedReader {
                     else
                       break;
                 default:
-                boolean flag = line.addChar((char) r);
+                public boolean flag = line.addChar((char) r);
                     if(flag)
                       System.out.print("\033[" + "1@"); //  [1@ = Insert a blank character position (shift line to the right)
                     System.out.print((char) r);
