@@ -16,7 +16,6 @@ import java.util.logging.Logger;
 
 public class EditableBufferedReader extends BufferedReader {
     private Line line;
-    private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     public EditableBufferedReader(Reader in) {
         super(in);
@@ -24,23 +23,11 @@ public class EditableBufferedReader extends BufferedReader {
     }
 
     public void setRaw() throws IOException {
-	new ProcessBuilder("/bin/sh", "-c", "stty -echo raw </dev/tty").start(); 
+	new ProcessBuilder("/bin/sh", "-c", "stty -echo raw </dev/tty").start();
     }
 
     public void unsetRaw() throws IOException {
-	new ProcessBuilder("/bin/sh", "-c", "stty echo -raw </dev/tty").start(); 
-    }
-
-    public final class Key {
-      private static final int BACKSPACE = 127;
-      private static final int UP = 1000;
-      private static final int DOWN = 1001;
-      private static final int LEFT = 1002;
-      private static final int RIGHT = 1003;
-      private static final int HOME = 1004;
-      private static final int END = 1007;
-      private static final int INSERT = 1005;
-      private static final int SUPR = 1006;
+	new ProcessBuilder("/bin/sh", "-c", "stty echo -raw </dev/tty").start();
     }
 
     public int read() throws IOException {
@@ -60,7 +47,7 @@ public class EditableBufferedReader extends BufferedReader {
      				case 'C': return Key.RIGHT;
      				case 'D': return Key.LEFT;
             			case '1':
-           			case '2':
+           		  	case '2':
             			case '3':
             			case '4':
      					if ((ch1 = super.read()) != '~') {

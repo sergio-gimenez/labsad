@@ -6,18 +6,17 @@
 
 package terminaleditorMVC;
 
+import java.util.Observable;
 /**
  *
  * @author lsadusr16
  */
 
-public class Line {
+public class Line extends Observable {
 
     private int index;
     private boolean insertState;
     public StringBuilder sb;
-
-    private static final String CSI = "\033[";
 
     public Line() {
         index = 0;
@@ -50,6 +49,7 @@ public class Line {
     public boolean left() {
         if (index > 0) {
             index = index-1;
+            notifyObservers();
             return true;
         }
         return false;
@@ -58,6 +58,7 @@ public class Line {
     public boolean right() {
         if (index < sb.length()) {
             index = index+1;
+            notifyObservers();
             return true;
         }
         return false;
@@ -67,6 +68,7 @@ public class Line {
         if (index <= sb.length() && index > 0) {
             index=index-1;
             sb.deleteCharAt(index);
+            notifyObservers();
             return true;
         }
         return false;
@@ -75,16 +77,19 @@ public class Line {
     public boolean supr() {
         if (index < sb.length()) {
             sb.deleteCharAt(index);
+            notifyObservers();
             return true;
         }
         return false;
     }
 
     public void home() {
+        notifyObservers();
         index = 0;
     }
 
     public void end() {
+        notifyObservers();
         index = sb.length();
     }
 }
