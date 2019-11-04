@@ -8,22 +8,23 @@ package terminaleditorMVC;
 import java.io.Observer;
 import java.io.Observable;
 import java.io.IOException;
+
 /**
  *
  * @author lsadusr16
  */
 
 public class Console implements Observer {
-	
+
     Line line;
-    final String CSI = "\033[";	
+    final String CSI = "\033[";
 
     public Console(Line line) {
         this.line = line;
 	line.addObserver(this);
     }
-	
-    public void update(Observable o, Object arg){	
+
+    public void update(Observable o, Object arg){
 	switch(arg) {
 		case Key.UP:
 			break;
@@ -35,8 +36,26 @@ public class Console implements Observer {
 		case Key.RIGHT:
 			System.out.print(CSI + "C");
 			break;
+		case Key.HOME:
+			System.out.print(CSI + "0G"); //[nG = Move to column 'n' of current line
+			break;
+		case Key.END:
+			System.out.print(CSI + (line.sb.length() + 1) + "G");
+			break;
+		case Key.INSERT:
+			break;
+		case Key.SUPR:
+			System.out.print(CSI + "1P"); //[1P = Delete a character position (shift line to the left)
+			break;
+		case Key.BACKSPACE:
+			System.out.print(CSI + "D");
+			System.out.print(CSI + "1P");
+			default:
+			public boolean flag = line.addChar((char) r);
+				if(flag)
+					System.out.print("\033[" + "1@"); //  [1@ = Insert a blank character position (shift line to the right)
+				System.out.print((char) r);
+			break;
+		}
 	}
-    }
-
-    
 }
