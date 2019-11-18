@@ -15,38 +15,20 @@ import java.io.Reader;
 
 public class EditableBufferedReader extends BufferedReader {
     private Line line;
+    private Console console;
 
     public EditableBufferedReader(Reader in) {
         super(in);
         line = new Line();
+        console = new Console(line);
     }
 
     public void setRaw() throws IOException {
-<<<<<<< HEAD
 	new ProcessBuilder("/bin/sh", "-c", "stty -echo raw </dev/tty").start();
     }
 
     public void unsetRaw() throws IOException {
 	new ProcessBuilder("/bin/sh", "-c", "stty echo -raw </dev/tty").start();
-    }
-
-    public final class Key {
-      private static final int BACKSPACE = 127;
-      private static final int UP = 1000;
-      private static final int DOWN = 1001;
-      private static final int LEFT = 1002;
-      private static final int RIGHT = 1003;
-      private static final int HOME = 1004;
-      private static final int END = 1007;
-      private static final int INSERT = 1005;
-      private static final int SUPR = 1006;
-=======
-	     new ProcessBuilder("/bin/sh", "-c", "stty -echo raw </dev/tty").start();
-    }
-
-    public void unsetRaw() throws IOException {
-	     new ProcessBuilder("/bin/sh", "-c", "stty echo -raw </dev/tty").start();
->>>>>>> c3a629984a2783a5ff95a4dbad1959ef59cbe9da
     }
 
     public int read() throws IOException {
@@ -112,14 +94,9 @@ public class EditableBufferedReader extends BufferedReader {
                     line.backspace();
                     break;
                 default:
-<<<<<<< HEAD
-                public boolean flag = line.addChar((char) r);
-                    if(flag)
-                      System.out.print("\033[" + "1@"); //  [1@ = Insert a blank character position (shift line to the right)
-                    System.out.print((char) r);
-=======
                     line.addChar((char) r);
->>>>>>> c3a629984a2783a5ff95a4dbad1959ef59cbe9da
+                    System.out.print("\033[" + "1@"); //  [1@ = Insert a blank character position (shift line to the right)
+                    System.out.print((char) r);
                     break;
             }
         }
