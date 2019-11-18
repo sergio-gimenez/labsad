@@ -31,26 +31,30 @@ public class Line extends Observable {
 
     public void home() {
         index = 0;
-        notifyObservers();
+        setChanged();
+        notifyObservers(Key.HOME);
     }
 
     public void end() {
         index = sb.length();
-        notifyObservers();
+        setChanged();
+        notifyObservers(Key.END);
     }
 
-    public boolean right() {
+    public void right() {
         if (index < sb.length()) {
             index = index+1;
         }
-        notifyObservers();
+        setChanged();
+        notifyObservers(Key.RIGHT);
     }
 
-    public boolean left() {
+    public void left() {
         if (index > 0) {
             index = index-1;
         }
-        notifyObservers();
+        setChanged();
+        notifyObservers(Key.LEFT);
     }
 
     public void insert() {
@@ -67,22 +71,25 @@ public class Line extends Observable {
             else sb.setCharAt(index, c);
         }
         index=index+1;
+        setChanged();
+        notifyObservers(Key.INSERT);
         return insertState;
-        notifyObservers();
     }
 
-    public boolean supr() {
+    public void supr() {
         if (index < sb.length()) {
             sb.deleteCharAt(index);
         }
-        notifyObservers();
+        setChanged();
+        notifyObservers(Key.SUPR);
     }
 
-    public boolean backspace() {
+    public void backspace() {
         if (index <= sb.length() && index > 0) {
             index=index-1;
             sb.deleteCharAt(index);
         }
-        notifyObservers();
+        setChanged();
+        notifyObservers(Key.BACKSPACE);
     }
 }

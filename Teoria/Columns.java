@@ -21,6 +21,7 @@ public class Columns {
 
   public static void main(String[] args) throws IOException {
     int c = 0;
+    String s = "";
     try {
       // 1st alt
       /*Process p = null;
@@ -35,30 +36,41 @@ public class Columns {
 
       // //3rd alt
       setRaw();
-      // // report size of text area un chars: CSI 18 t
-      // // should return ESC [ 8 ; rmax ; cmax t
+      // report size of text area un chars: CSI 18 t
+      // should return ESC [ 8 ; rmax ; cmax t
       // System.out.println("\033[18t");
       // Scanner sc = new Scanner(System.in);
       // sc.skip("\033\\[8;\\d+;(\\d+)t");
       // c = Integer.parseInt(sc.match().group(1));
 
       //4th alt
-      Pattern p = Pattern.compile("\033\\[8;\\d+;(\\d+)t"); //guartdo el pattern en llenguatge intern
-      Matcher m = p.matcher(readChars(new BufferedReader(new InputStreamReader(System.in))));
-      m.matches();
-      c = Integer.parseInt(m.group(1));
+      // Pattern p = Pattern.compile("\033\\[8;\\d+;(\\d+)t"); //guartdo el pattern en llenguatge intern
+      // Matcher m = p.matcher(readChars(new BufferedReader(new InputStreamReader(System.in))));
+      // m.matches();
+      // c = Integer.parseInt(m.group(1));
 
       //5th alt with String methods only
-      String str = readChars(new BufferedReader(new InputStreamReader(System.in)));
-      String cmax = str.substring(
-        str.indexOf(";", str.indexOf(";") + 1) + 1, //posició del primer dígit de columnes
-        str.length() - 1); //Des del primer dígit de cmax menys la t
+      // String str = readChars(new BufferedReader(new InputStreamReader(System.in)));
+      // String cmax = str.substring(
+      //   str.indexOf(";", str.indexOf(";") + 1) + 1, //posició del primer dígit de columnes
+      //   str.length() - 1); //Des del primer dígit de cmax menys la t
+
+      //6th alt
+      setRaw();
+      // report size of text area un chars: CSI 18 t
+      // should return ESC [ 8 ; rmax ; cmax t
+      System.out.println("\033[18t");
+      Scanner sc = new Scanner(System.in);
+      // sc.skip("\033\\[8;\\d+;(\\d+)t");
+      sc.useDelimiter(Pattern.compile(";"));
+      sc.next();
+      s = sc.next();
 
       } finally {
         //clean up console
         unsetRaw();
       }
-      System.out.println("COLUMNS = " + c);
+      System.out.println("COLUMNS = " + s);
   }
 }
 

@@ -51,8 +51,6 @@ public class Console implements Observer {
     		System.out.print(CSI + "D");
     		System.out.print(CSI + "1P");
     	default:
-    		  System.out.print(CSI + "1@"); //  [1@ = Insert a blank character position (shift line to the right)
-    			System.out.print((char) r);
     	  break;
     	}
     }
