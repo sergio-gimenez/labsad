@@ -35,29 +35,61 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 /* ListDemo.java requires no other files. */
-public class JListDemoGeneric extends JPanel {
+public class JListDemoGeneric extends JPanel implements ActionListener {
 
     // define a JList and a DefaultListModel
     JList<String> list;
-    DefaultListModel listModel;
+    DefaultListModel<String> listModel;
+    JButton addButton;
+    JButton removeButton;
+    JTextField entry;
+
+    int counter = 0;
 
     public JListDemoGeneric() {
         super(new BorderLayout());
 
+        // Add buttons and entry text
+        JPanel inp = new JPanel();
+        inp.setLayout(new BoxLayout(inp, BoxLayout.LINE_AXIS));
+        entry = new JTextField();
+        addButton = new JButton("Add Element");
+        removeButton = new JButton("Remove Element");
+
+        entry.addActionListener(this);
+        addButton.addActionListener(this);
+        removeButton.addActionListener(this);
+
         // create initial listModel
         listModel = new DefaultListModel<>();
-        listModel.addElement("element");
-        listModel.addElement("element");
-        listModel.addElement("element");
-        listModel.addElement("element");
-        listModel.addElement("element");
-        listModel.addElement("element");
-        listModel.addElement("element");
+        listModel.addElement("element" + counter++);
+        listModel.addElement("element" + counter++);
+        listModel.addElement("element" + counter++);
+        listModel.addElement("element" + counter++);
+        listModel.addElement("element" + counter++);
+        listModel.addElement("element" + counter++);
+        listModel.addElement("element" + counter++);
+
+        // Add action listeners for buttons
+        // Manera 1: Creant varios ActionListener
+        /*
+         * addButton.addActionListener(new ActionListener() { public void
+         * actionPerformed(ActionEvent e) { listModel.addElement("Element " +
+         * counter++); } }); removeButton.addActionListener(new ActionListener() {
+         * public void actionPerformed(ActionEvent e) { if (listModel.getSize() > 0)
+         * listModel.removeElementAt(0); } });
+         * 
+         */
 
         // Create the list and put it in a scroll pane.
         list = new JList<>(listModel);
         JScrollPane listScrollPane = new JScrollPane(list);
-        add(listScrollPane, BorderLayout.CENTER);
+
+        inp.add(entry);
+        inp.add(addButton);
+        inp.add(removeButton);
+        add(inp, BorderLayout.PAGE_END);
+
     }
 
     /**
@@ -66,20 +98,23 @@ public class JListDemoGeneric extends JPanel {
      */
     private static void createAndShowGUI() {
         // Set the look and feel.
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+        }
 
         // Make sure we have nice window decorations.
+        JFrame.setDefaultLookAndFeelDecorated(true);
 
         // Create and set up the window.
         JFrame frame = new JFrame("JList Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         // Create and set up the content pane.
         JListDemoGeneric model = new JListDemoGeneric();
         /* Tambe es valid fer: */ // JComponent newContentPane = new JListDemoGeneric();
         model.setOpaque(true);
         frame.setContentPane(model);
-
-        // Add elements
-        // model.listModel.addElement("AAA");
 
         // Display the window.
         frame.pack();
@@ -95,5 +130,28 @@ public class JListDemoGeneric extends JPanel {
                 createAndShowGUI();
             }
         });
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        Object source = event.getSource();
+        String text = entry.getText();
+        if (source == removeButton) {
+            for (int i = 0; i < listModel.size(); i++) {
+                if (listModel.get(i).contains(text)) {
+                    listModel.remove(i);
+                    break;
+                }
+            }
+        } else {
+            int i = 0;
+            for (i = 0; i < listModel.size(); i++) {
+                if (listModel.get(i).contains(text)) {
+                    break;
+                }
+            }
+            if (i == listModel.size())
+                listModel.addElement(text);
+        }
     }
 }
