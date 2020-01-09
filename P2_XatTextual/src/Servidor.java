@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+
 
 public class Servidor {
 
@@ -23,14 +23,13 @@ public class Servidor {
 
             MyServerSocket serverSocket = new MyServerSocket(Integer.parseInt(port));
             // A concurrent map associating sockets to nicks.
-            ConcurrentMap<String, String> clients = new ConcurrentHashMap<>();
 
             System.out.println("Server is listening...");
 
             while (true) {
                 MySocket socket = serverSocket.accept();
                 // TODO put in ConcurrentMap
-
+                (new ConcurrentHash(socket)).start();
             }
 
         } catch (IOException e) {
