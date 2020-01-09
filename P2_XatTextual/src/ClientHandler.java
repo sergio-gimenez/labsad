@@ -17,11 +17,12 @@ public class ClientHandler extends Thread {
     @Override
     public void run() {
         try {
-
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
             out.println(WELCOME_MESSAGE);
-        }
+        }catch (IOException e){
+            e.printStackTrace();
+                }
     }
 
 }
