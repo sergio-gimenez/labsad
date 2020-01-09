@@ -10,7 +10,6 @@ public class Servidor {
 
     public static void main(String[] args) {
         try {
-            // TODO do while instead of while
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("Insert port number: ");
             String port = in.readLine();
@@ -23,13 +22,13 @@ public class Servidor {
 
             MyServerSocket serverSocket = new MyServerSocket(Integer.parseInt(port));
             // A concurrent map associating sockets to nicks.
+            ConcurrentHashMap<String, MySocket> clients = new ConcurrentHashMap<>();
 
             System.out.println("Server is listening...");
 
             while (true) {
                 MySocket socket = serverSocket.accept();
-                // TODO put in ConcurrentMap
-                (new ConcurrentHash(socket)).start();
+                (new User(socket, clients)).start();
             }
 
         } catch (IOException e) {

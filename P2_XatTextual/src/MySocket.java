@@ -10,6 +10,7 @@ public class MySocket {
     public Socket socket;
     public BufferedReader buffReader;
     public PrintWriter pW;
+    private String host;
 
     // Varios constructors en funcio de la necessitat
     public MySocket(int port) {
@@ -32,7 +33,12 @@ public class MySocket {
 
     public MySocket(Socket s) {
         socket = s;
+        host = s.getRemoteSocketAddress().toString();
         start();
+    }
+
+    public String getHost(){
+        return host;
     }
 
     public void start() {
