@@ -2,7 +2,9 @@ package src;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -72,5 +74,14 @@ public class MySocket {
     public void println(String message) {
         pW.println(message);
     }
+
+    public OutputStream getOutputStream() throws IOException {
+        return socket.getOutputStream();
+    }
+
+    public InputStream getInputStream() throws IOException {
+        return socket.getInputStream();
+    }
+
 
 }
