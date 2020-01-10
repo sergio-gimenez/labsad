@@ -29,7 +29,7 @@ public class User extends Thread {
 
         String msg;
         while ((msg = socket.readLine()) != null) {
-            if (msg.equalsIgnoreCase(Keywords.DISCONNECT)) {
+            if (msg.equalsIgnoreCase(Keywords.BYE)) {
                 clients.remove(nick);
                 sendOthers(nick, nick + " has left the chatroom");
                 socket.close();

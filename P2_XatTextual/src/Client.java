@@ -32,11 +32,11 @@ public class Client {
                 try {
                     String linia;
                     BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-                    while (!(linia = bf.readLine()).equalsIgnoreCase(Keywords.DISCONNECT)) {
+                    while (!(linia = bf.readLine()).equalsIgnoreCase(Keywords.BYE)) {
                         mySocket.println(linia);
                     }
                     System.out.println("Disconnecting");
-                    mySocket.println(Keywords.DISCONNECT);
+                    mySocket.println(Keywords.BYE);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -50,7 +50,7 @@ public class Client {
                     if (linia.equalsIgnoreCase(Keywords.NICK)) {
                         mySocket.println(nick);
 
-                    } else if (linia.equalsIgnoreCase(Keywords.DISCONNECT)) {
+                    } else if (linia.equalsIgnoreCase(Keywords.BYE)) {
                         break; // Disconnect
                     } else {
                         System.out.println(linia);
